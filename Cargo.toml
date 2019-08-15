@@ -1,0 +1,57 @@
+[package]
+name = "tiny_machine"
+version = "0.1.0"
+authors = ["Spenser Reinhardt <spereinh@cisco.com>"]
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "tiny_machine_1"
+path = "src/bin.rs"
+required-features = ["lvl1"]
+[[bin]]
+name = "tiny_machine_2"
+path = "src/bin.rs"
+required-features = ["lvl2"]
+[[bin]]
+name = "tiny_machine_3"
+path = "src/bin.rs"
+required-features = ["lvl3"]
+
+[dependencies]
+log = {version="^0.4", features=["serde"]}
+pretty_env_logger = "*"
+colored = "^1"
+clap = "^2"
+bit_field = "^0.9"
+bytes = "^0.4"
+mio = "^0.6"
+futures = "^0.1"
+state_machine_future = "^0.1"
+tokio = "^0.1"
+tokio-core = "^0.1"
+
+[profile.dev]
+opt-level = 0
+debug = true
+lto = false
+codegen-units = 2
+
+[profile.test]
+opt-level = 2
+debug = true
+lto = false
+codegen-units = 2
+
+[profile.release]
+opt-level = 3
+debug = false
+lto = true
+codegen-units = 2
+
+[features]
+real_flag = []
+lvl1 = []
+lvl2 = []
+lvl3 = []

@@ -1,0 +1,7 @@
+image: "rustlang/rust:nightly"
+
+test:cargo:
+  script:
+  - rustc --version
+  - cargo --version
+  - RUST_BACKTRACE=1 cargo test --all --quiet --color always --all-features
