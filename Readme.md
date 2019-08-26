@@ -25,6 +25,10 @@ This challenge is a 4-bit CPU and memory emulator that can be run in a variety o
 #### Getting running
 
 ```sh
+# Install gui deps (client builds)
+sudo apt install \
+    cmake libxcb-xkb-dev libfontconfig1-dev libgles2-mesa-dev \
+    libfreetype6-dev libexpat-dev
 # Install rustup
 sudo apt-get install build-essential software-properties-common -y
 curl https://sh.rustup.rs -sSf | sh

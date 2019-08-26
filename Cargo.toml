@@ -4,21 +4,29 @@ version = "0.2.0"
 authors = ["Spenser Reinhardt <spereinh@cisco.com>"]
 edition = "2018"
 
+# common lib
 [lib]
 path = "src/lib.rs"
 
+# server bins
 [[bin]]
 name = "tm_server_1"
 path = "src/server.rs"
-required-features = ["lvl1"]
+required-features = ["lvl1", "server"]
 [[bin]]
 name = "tm_server_2"
 path = "src/server.rs"
-required-features = ["lvl2"]
+required-features = ["lvl2", "server"]
 [[bin]]
 name = "tm_server_3"
 path = "src/server.rs"
-required-features = ["lvl3"]
+required-features = ["lvl3", "server"]
+
+# client bins
+[[bin]]
+name = "tm_client"
+path = "src/client.rs"
+required-features = ["client"]
 
 [dependencies]
 log = {version="^0.4", features=["serde"]}
@@ -32,6 +40,7 @@ futures = "^0.1"
 state_machine_future = "^0.1"
 tokio = "^0.1"
 tokio-core = "^0.1"
+azul = { git = "https://github.com/maps4print/azul", optional=true }
 
 [profile.dev]
 opt-level = 0
@@ -56,3 +65,5 @@ real_flag = []
 lvl1 = []
 lvl2 = []
 lvl3 = []
+server = []
+client = [ "azul" ]

@@ -1,7 +1,19 @@
 image: "rustlang/rust:nightly"
 
-test:cargo:
+cargo:test:
   script:
   - rustc --version
   - cargo --version
   - RUST_BACKTRACE=1 cargo test --all --quiet --color always --all-features
+cargo:build:lib:
+  - RUST_BACKTRACE=1 cargo build
+cargo:build:server:
+  - RUST_BACKTRACE=1 cargo build --features "server"
+  - RUST_BACKTRACE=1 cargo build --features "server lvl1"
+  - RUST_BACKTRACE=1 cargo build --features "server lvl2"
+  - RUST_BACKTRACE=1 cargo build --features "server lvl3"
+  - RUST_BACKTRACE=1 cargo build --features "server lvl1 real_flag"
+  - RUST_BACKTRACE=1 cargo build --features "server lvl2 real_flag"
+  - RUST_BACKTRACE=1 cargo build --features "server lvl3 real_flag"
+cargo:build:client:
+  - RUST_BACKTRACE=1 cargo build --features "client"

@@ -2,13 +2,6 @@
 
 #[allow(unused_imports)]
 #[macro_use] extern crate log;
-extern crate pretty_env_logger;
-extern crate colored;
-extern crate bit_field;
-extern crate bytes;
-extern crate mio;
-extern crate tokio;
-extern crate tokio_core;
 #[macro_use] extern crate futures;
 #[macro_use] extern crate state_machine_future;
 
@@ -17,6 +10,8 @@ pub mod registers;
 pub mod instructions;
 pub mod machine;
 pub mod state;
+#[cfg(feature="client")]
+pub mod ui;
 
 pub const MAX_VALUE: u8 = 0b1111; // 0xF 15
 

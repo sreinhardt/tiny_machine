@@ -1,10 +1,4 @@
 #[macro_use] extern crate log;
-extern crate pretty_env_logger;
-extern crate tokio;
-extern crate tokio_core;
-extern crate futures;
-
-extern crate tiny_machine;
 
 use std::sync::atomic::{AtomicUsize, Ordering};
 use tokio::net::TcpListener;
