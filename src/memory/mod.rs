@@ -108,7 +108,7 @@ impl Memory {
     if MEMORY_SIZE <= loc {
       return Err(MemErr::OutOfBounds(offset))
     }
-    if std::u8::MAX < value {
+    if crate::MAX_VALUE < value {
       return Err(MemErr::ValueTooLarge(value))
     }
     let mut val: u8 = self.inner[loc]; // take byte for modification

@@ -97,7 +97,7 @@ impl Registers {
   pub fn set_ip(&mut self, ip: u8) -> RegRes<()> {
     #[cfg(not(feature = "lvl3"))]
     trace!{"Registers::set_ip()"};
-    if std::u8::MAX < ip {
+    if crate::MAX_VALUE < ip {
       return Err(RegErr::ValueTooLarge(ip))
     }
     self.inst_ptr = ip;
@@ -106,7 +106,7 @@ impl Registers {
   pub fn set_li(&mut self, li: u8) -> RegRes<()> {
     #[cfg(not(feature = "lvl3"))]
     trace!{"Registers::set_li()"};
-    if std::u8::MAX < li {
+    if crate::MAX_VALUE < li {
       return Err(RegErr::ValueTooLarge(li))
     }
     self.loop_idx = li;
@@ -117,7 +117,7 @@ impl Registers {
   pub fn set_fr(&mut self, fr: u8) -> RegRes<()> {
     #[cfg(not(feature = "lvl3"))]
     trace!{"Registers::set_fr()"};
-    if std::u8::MAX < fr {
+    if crate::MAX_VALUE < fr {
       return Err(RegErr::ValueTooLarge(fr))
     }
     self.flags = fr;
@@ -126,7 +126,7 @@ impl Registers {
   pub fn set_ac(&mut self, ac: u8) -> RegRes<()> {
     #[cfg(not(feature = "lvl3"))]
     trace!{"Registers::set_ac()"};
-    if std::u8::MAX < ac {
+    if crate::MAX_VALUE < ac {
       return Err(RegErr::ValueTooLarge(ac))
     }
     self.accumulator = ac;
