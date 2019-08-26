@@ -1,6 +1,6 @@
-use memory::*;
-use registers::*;
-#[allow(unused_imports)] use instructions::*;
+use crate::memory::*;
+use crate::registers::*;
+#[allow(unused_imports)] use crate::instructions::*;
 use machine::*;
 
 #[test]

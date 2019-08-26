@@ -10,7 +10,7 @@ use state_machine_future::RentToOwn;
 
 
 use self::error::*;
-use machine::*;
+use crate::machine::*;
 
 
 #[cfg(all(feature="real_flag", feature="lvl1"))] static FLAG: &str = "40ByteCTF{H0w_m4ny_0pc0des_t0_4_tinyM4chine?}";
@@ -91,9 +91,9 @@ impl PollGame for Game {
     let state = Ready::readable();
     try_ready!{sess.stream.poll_read_ready(state)};
     let mut buf = Vec::with_capacity(MACHINE_SIZE+1);
-    let size = try_ready!{sess.stream.read_buf(&mut buf)};
+    let _size = try_ready!{sess.stream.read_buf(&mut buf)};
     #[cfg(not(feature = "lvl3"))]
-    debug!{"Client sent {:?} bytes: {}", size, sess.id};
+    debug!{"Client sent {:?} bytes: {}", _size, sess.id};
     let sess = sess.take();
     if buf.len() < MACHINE_SIZE {
       #[cfg(not(feature = "lvl3"))]
@@ -136,7 +136,7 @@ impl PollGame for Game {
     trace!{"Game::poll_execute({})", sess.id};
     let mut sess = sess.take();
     let res = sess.machine.exec();
-    if let Ok(res) = res {
+    if let Ok(_) = res {
       #[cfg(not(feature = "lvl3"))]
       info!{"Client machine executed correctly: {}", sess.id};
       let sess = Validate {

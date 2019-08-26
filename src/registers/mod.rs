@@ -4,7 +4,6 @@ mod error;
 use std::fmt;
 use std::ops::Range;
 use bit_field::*;
-use ::MAX_VALUE; // 0b1111u8
 use self::error::RegisterError as RegErr;
 use self::error::RegisterResult as RegRes;
 
@@ -98,7 +97,7 @@ impl Registers {
   pub fn set_ip(&mut self, ip: u8) -> RegRes<()> {
     #[cfg(not(feature = "lvl3"))]
     trace!{"Registers::set_ip()"};
-    if MAX_VALUE < ip {
+    if std::u8::MAX < ip {
       return Err(RegErr::ValueTooLarge(ip))
     }
     self.inst_ptr = ip;
@@ -107,7 +106,7 @@ impl Registers {
   pub fn set_li(&mut self, li: u8) -> RegRes<()> {
     #[cfg(not(feature = "lvl3"))]
     trace!{"Registers::set_li()"};
-    if MAX_VALUE < li {
+    if std::u8::MAX < li {
       return Err(RegErr::ValueTooLarge(li))
     }
     self.loop_idx = li;
@@ -118,7 +117,7 @@ impl Registers {
   pub fn set_fr(&mut self, fr: u8) -> RegRes<()> {
     #[cfg(not(feature = "lvl3"))]
     trace!{"Registers::set_fr()"};
-    if MAX_VALUE < fr {
+    if std::u8::MAX < fr {
       return Err(RegErr::ValueTooLarge(fr))
     }
     self.flags = fr;
@@ -127,7 +126,7 @@ impl Registers {
   pub fn set_ac(&mut self, ac: u8) -> RegRes<()> {
     #[cfg(not(feature = "lvl3"))]
     trace!{"Registers::set_ac()"};
-    if MAX_VALUE < ac {
+    if std::u8::MAX < ac {
       return Err(RegErr::ValueTooLarge(ac))
     }
     self.accumulator = ac;

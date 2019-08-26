@@ -1,8 +1,8 @@
 use std::fmt;
 
-use instructions::InstructionError as InstErr;
-use registers::RegisterError as RegErr;
-use memory::MemoryError as MemErr;
+use crate::instructions::InstructionError as InstErr;
+use crate::registers::RegisterError as RegErr;
+use crate::memory::MemoryError as MemErr;
 
 pub type MachineResult<M> = Result<M, MachineError>;
 pub enum MachineError {

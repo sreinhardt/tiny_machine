@@ -1,22 +1,23 @@
 [package]
 name = "tiny_machine"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Spenser Reinhardt <spereinh@cisco.com>"]
+edition = "2018"
 
 [lib]
 path = "src/lib.rs"
 
 [[bin]]
-name = "tiny_machine_1"
-path = "src/bin.rs"
+name = "tm_server_1"
+path = "src/server.rs"
 required-features = ["lvl1"]
 [[bin]]
-name = "tiny_machine_2"
-path = "src/bin.rs"
+name = "tm_server_2"
+path = "src/server.rs"
 required-features = ["lvl2"]
 [[bin]]
-name = "tiny_machine_3"
-path = "src/bin.rs"
+name = "tm_server_3"
+path = "src/server.rs"
 required-features = ["lvl3"]
 
 [dependencies]

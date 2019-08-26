@@ -6,7 +6,7 @@ use std::ops::Range;
 use bit_field::*;
 //use registers::*;
 //use memory::*;
-use machine::Machine;
+use crate::machine::Machine;
 use self::error::InstructionError as InstErr;
 use self::error::InstructionResult as InstRes;
 
@@ -174,8 +174,9 @@ impl Instruction {
         machine.get_mut_reg().inc_ip();
         machine.get_mut_reg().inc_ip();
         let ac = machine.get_reg().get_ac();
-        let mut mem = machine.get_mut_mem();
-        mem.set_loc(addr.into(), ac).map_err(|e| e.into()) // returns result
+        machine.get_mut_mem()
+            .set_loc(addr.into(), ac)
+            .map_err(|e| e.into()) // returns result
       },
       // AC = Input   //TODO
       Instruction::GET => {

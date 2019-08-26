@@ -1,7 +1,7 @@
 use std::fmt;
 
-use memory::MemoryError;
-use registers::RegisterError;
+use crate::memory::MemoryError;
+use crate::registers::RegisterError;
 
 pub type InstructionResult<I> = Result<I, InstructionError>;
 pub enum InstructionError {

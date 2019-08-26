@@ -3,7 +3,6 @@ mod error;
 
 use std::fmt;
 use bit_field::*;
-use ::MAX_VALUE;
 use self::error::MemoryError as MemErr;
 use self::error::MemoryResult as MemRes;
 
@@ -109,7 +108,7 @@ impl Memory {
     if MEMORY_SIZE <= loc {
       return Err(MemErr::OutOfBounds(offset))
     }
-    if MAX_VALUE < value {
+    if std::u8::MAX < value {
       return Err(MemErr::ValueTooLarge(value))
     }
     let mut val: u8 = self.inner[loc]; // take byte for modification

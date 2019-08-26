@@ -2,11 +2,11 @@
 mod error;
 
 use std::fmt;
-use memory::{Memory, MemoryInner, MEMORY_SIZE};
-use registers::{Registers, RegisterInner, REGISTER_SIZE};
-use instructions::Instruction;
-use instructions::InstructionError as InstErr;
-use instructions::InstructionResult as InstRes;
+use crate::memory::{Memory, MemoryInner, MEMORY_SIZE};
+use crate::registers::{Registers, RegisterInner, REGISTER_SIZE};
+use crate::instructions::Instruction;
+use crate::instructions::InstructionError as InstErr;
+use crate::instructions::InstructionResult as InstRes;
 use self::error::MachineResult as MacRes;
 
 pub use self::error::MachineError;
@@ -24,6 +24,7 @@ pub struct Machine {
   inp: PortStorage,
   outp: PortStorage,
   call_count: usize,
+  #[allow(dead_code)]
   error: InstRes<()>,
 }
 impl Default for Machine {

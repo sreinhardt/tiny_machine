@@ -1,10 +1,10 @@
 use std::fmt;
 use std::io::Error as IoErr;
 
-use instructions::InstructionError as InstErr;
-use registers::RegisterError as RegErr;
-use memory::MemoryError as MemErr;
-use machine::MachineError as MacErr;
+use crate::instructions::InstructionError as InstErr;
+use crate::registers::RegisterError as RegErr;
+use crate::memory::MemoryError as MemErr;
+use crate::machine::MachineError as MacErr;
 
 pub type GameResult<M> = Result<M, GameError>;
 pub enum GameError {

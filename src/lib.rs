@@ -1,4 +1,3 @@
-#![feature(iterator_step_by, non_lexical_lifetimes)]
 #![allow(non_snake_case)]
 
 #[allow(unused_imports)]
@@ -22,11 +21,11 @@ pub mod state;
 pub const MAX_VALUE: u8 = 0b1111; // 0xF 15
 
 pub mod prelude {
-  pub use memory::*;
-  pub use registers::*;
-  pub use instructions::*;
-  pub use machine::*;
-  pub use state::*;
+  pub use crate::memory::*;
+  pub use crate::registers::*;
+  pub use crate::instructions::*;
+  pub use crate::machine::*;
+  pub use crate::state::*;
 }
 
 #[cfg(test)] use bit_field::*;
