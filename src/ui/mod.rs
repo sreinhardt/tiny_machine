@@ -1,87 +1,38 @@
-use azul::prelude::*;
-use azul::css::css_parser;
-use azul::widgets::{label::Label, button::Button, table_view::*};
+use orbtk::prelude::*;
 
-pub struct UiModel {
-    instructions: Vec<String>,
-    memory: Vec<u8>,
-    registers: Vec<u8>,
-    in_port: Vec<u8>,
-    out_port: Vec<u8>,
+pub mod disassembly;
+pub use disassembly::DisassemblyView;
+
+pub struct UiModelState {
+    disassembly: DisassemblyView,
 }
-impl Default for UiModel {
+impl Default for UiModelState {
     fn default() -> Self {
-        UiModel {
-            //instructions: Vec::with_capacity(20),
-            instructions: vec!["Hello".to_string(), "rust".to_string()],
-            //memory: Vec::with_capacity(20),
-            memory: vec![0x00, 0x01, 0x02, 0x03],
-            registers: Vec::with_capacity(4),
-            in_port: Vec::with_capacity(10),
-            out_port: Vec::with_capacity(10),
+        UiModelState {
+            disassembly: DisassemblyView::default(),
         }
     }
 }
-impl Layout for UiModel {
-    fn layout(&self, info: LayoutInfo<Self>) -> Dom<Self> {
-        let reset_button = Button::with_label("Reset State").dom();
-        let next_button = Button::with_label("Next Instruction").dom();
+impl State for UiModelState {
+    fn update(&self, ctx: &mut Context<'_>) {
 
-        Dom::div()
-            .with_id("main")
-            .with_child(
-                Dom::div()
-                    .with_id("disassembly")
-                    .with_child(self.disassembly())
-                    .with_child(
-                        Dom::div()
-                            .with_id("memory")
-                            .with_child(self.memory())
-                    )
-            )
-            .with_child(
-                Dom::div()
-                    .with_class("row")
-                    .with_child(reset_button)
-                    .with_child(next_button)
-            )
     }
 }
-impl UiModel {
-    pub fn css(&self) -> Css {
-        css_parser::new_from_str("
-            * {
-                box-sizing: border-box;
-                flex-grow: 1;
-                flex-direction: column;
-            }
-            #disassembly {
-                background-color: gray;
-                width: 300px;
-                height: 500px;
-                border: 1px solid black;
-            }
-        ").unwrap()
-    }
-    fn update_instructions(&mut self, instructions: Vec<String>) {
-        self.instructions = instructions;
-    }
-    fn disassembly(&self) -> Dom<Self> {
-        self.instructions.iter().enumerate()
-            .map(|(idx, op)| {
-                NodeData::label(op.clone())
-            }).collect::<Dom<Self>>()
-    }
-    fn memory(&self) -> Dom<Self> {
-        self.memory.iter().enumerate()
-            .map(|(idx, val)| {
-                NodeData::label(*val)
-            }).collect::<Dom<Self>>()
-    }
-    fn registers(&self) -> Dom<Self> {
-        self.registers.iter().enumerate()
-            .map(|(idx, reg)| {
-                NodeData::label(*reg)
-            }).collect::<Dom<Self>>()
+
+widget!(UiModel<UiModelState>);
+impl Template for UiModel {
+    fn template(self, id: Entity, ctx: &mut BuildContext) -> Self {
+        let state = self.clone_state();
+
+        self.name("UiModel").child(
+            Grid::create()
+                .rows(Rows::create().row("*").row("*").build())
+                .child(
+                    Container::create()
+                        .attach(GridRow(0))
+                        .child(state.disassembly.generate(ctx))
+                        .build(ctx),
+                ).build(ctx),
+        )
     }
 }

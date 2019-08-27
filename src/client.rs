@@ -1,7 +1,7 @@
 #[macro_use] extern crate log;
 
 use tiny_machine::ui::*;
-use azul::prelude::*;
+use orbtk::prelude::*;
 
 #[allow(dead_code)] const IP: &str = "127.0.0.1";
 #[allow(dead_code)] const PORT: &str = "8000";
@@ -9,11 +9,20 @@ use azul::prelude::*;
 fn main() {
   pretty_env_logger::init();
 
-  trace!{"Starting azul ui"};
+  trace!{"Starting orbtk ui"};
   let model = UiModel::default();
-  let config = AppConfig::default();
-  let css = model.css();
-  let mut app = App::new(model, config).unwrap();
-  let window = app.create_window(WindowCreateOptions::default(), css).unwrap();
-  app.run(window).unwrap();
+
+  orbtk::initialize();
+
+  Application::new()
+    .window(|ctx| {
+        Window::create()
+            .title("Tiny Machine Debugger")
+            .position((100.0, 100.0))
+            .size(200.0, 200.0)
+            //.resizeable(true)
+            .child(UiModel::create().build(ctx))
+            .build(ctx)
+    })
+    .run();
 }

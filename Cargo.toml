@@ -40,7 +40,7 @@ futures = "^0.1"
 state_machine_future = "^0.1"
 tokio = "^0.1"
 tokio-core = "^0.1"
-azul = { git = "https://github.com/maps4print/azul", optional=true }
+orbtk = { git = "https://gitlab.redox-os.org/redox-os/orbtk.git", optional=true}
 
 [profile.dev]
 opt-level = 0
@@ -66,4 +66,4 @@ lvl1 = []
 lvl2 = []
 lvl3 = []
 server = []
-client = [ "azul" ]
+client = [ "orbtk" ]
