@@ -1,5 +1,6 @@
 use orbtk::prelude::*;
 
+const WND_NAME: &str = "disassembly";
 const IDX_NAME: &str = "disas_idx";
 const HEX_NAME: &str = "disas_hex";
 const OP_NAME:  &str = "disas_op";
@@ -36,32 +37,13 @@ impl Default for DisassemblyView {
 }
 impl DisassemblyView {
     pub fn generate(&self, ctx: &mut BuildContext) -> Entity {
-        let mut columns = Columns::create()
-            .column(Column::create()
-                .width(ColumnWidth::Auto)
-                .min_width(self.idx_width)
-                .build());
-        if self.show_hex {
-            columns = columns.column(Column::create()
-                .width(ColumnWidth::Auto)
-                .min_width(self.hex_width)
-                .build());
-        }
-        let columns = columns.column(Column::create()
-                        .width(ColumnWidth::Auto)
-                        .min_width(self.opcode_width)
-                        .build())
-                    .build();
-
         let mut grid = Grid::create()
-            .name("disassembly")
+            .name(WND_NAME)
             //.min_size(min_width, min_height)
-            .columns(columns)
-            .rows(Rows::create()
-                .repeat("*", self.instructions.len())
-                .build()
-            );
+            .columns(self.columns())
+            .rows(self.rows());
         for idx in 0..self.instructions.len() {
+            let opcode = &self.instructions[idx];
             let mut col = 0;
             grid = grid.child( // row count
                 TextBlock::create()
@@ -76,7 +58,8 @@ impl DisassemblyView {
                 grid = grid.child(
                     TextBlock::create()
                         .name(HEX_NAME)
-                        .text("0x00")
+                        //.text(format!{"{:2X}", opcode})
+                        .text("0x00".to_string())
                         .attach(GridColumn(col))
                         .attach(GridRow(idx))
                         .build(ctx),
@@ -86,12 +69,35 @@ impl DisassemblyView {
             grid = grid.child( // actual opcodes
                 TextBlock::create()
                     .name(OP_NAME)
-                    .text(self.instructions[idx].as_ref())
+                    .text(format!{"{}", opcode})
                     .attach(GridColumn(col))
                     .attach(GridRow(idx))
                     .build(ctx),
             );
         }
         grid.build(ctx)
+    }
+    fn columns(&self) -> Columns {
+        let mut columns = Columns::create()
+            .column(Column::create()
+                .width(ColumnWidth::Auto)
+                .min_width(self.idx_width)
+                .build());
+        if self.show_hex {
+            columns = columns.column(Column::create()
+                .width(ColumnWidth::Auto)
+                .min_width(self.hex_width)
+                .build());
+        }
+        columns.column(Column::create()
+            .width(ColumnWidth::Auto)
+            .min_width(self.opcode_width)
+            .build()
+        ).build()
+    }
+    fn rows(&self) -> Rows {
+        Rows::create()
+            .repeat("*", self.instructions.len())
+            .build()
     }
 }
