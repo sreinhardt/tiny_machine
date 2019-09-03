@@ -3,15 +3,19 @@ use orbtk::prelude::*;
 pub mod disassembly;
 pub mod memory;
 pub mod registers;
+pub mod ports;
 
 use disassembly::DisassemblyView;
 use memory::MemoryView;
 use registers::RegisterView;
+use ports::PortView;
 
 pub struct UiModelState {
     disassembly: DisassemblyView,
     memory:      MemoryView,
     registers:   RegisterView,
+    in_port:     PortView,
+    out_port:    PortView,
 }
 impl Default for UiModelState {
     fn default() -> Self {
@@ -19,6 +23,8 @@ impl Default for UiModelState {
             disassembly: DisassemblyView::default(),
             memory:      MemoryView::default(),
             registers:   RegisterView::default(),
+            in_port:     PortView::in_port(),
+            out_port:    PortView::out_port(),
         }
     }
 }
@@ -37,7 +43,7 @@ impl Template for UiModel {
             Grid::create()
                 .rows(
                     Rows::create()
-                        .repeat("*", 3)
+                        .repeat("*", 5)
                         .build()
                 ).child(
                     Container::create()
@@ -53,6 +59,16 @@ impl Template for UiModel {
                     Container::create()
                         .attach(GridRow(2))
                         .child(state.registers.generate(ctx))
+                        .build(ctx),
+                ).child(
+                    Container::create()
+                        .attach(GridRow(3))
+                        .child(state.in_port.generate(ctx))
+                        .build(ctx),
+                ).child(
+                    Container::create()
+                        .attach(GridRow(4))
+                        .child(state.out_port.generate(ctx))
                         .build(ctx),
                 ).build(ctx)
         )

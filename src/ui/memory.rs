@@ -1,9 +1,9 @@
 use orbtk::prelude::*;
 
-const WND_NAME:    &str = "memory";
-const IDX_NAME:    &str = "mem_idx";
-const HEX_NAME:    &str = "mem_hex";
-const ASCII_NAME:  &str = "mem_ascii";
+const WND_NAME:     &str = "memory";
+const IDX_CLASS:    &str = "idx";
+const HEX_CLASS:    &str = "hex";
+const ASCII_CLASS:  &str = "ascii";
 
 const ROW_SIZE:    usize = 8;
 const IDX_WIDTH:   f64   = 10.0;
@@ -39,11 +39,12 @@ impl Default for MemoryView {
 impl MemoryView {
     pub fn generate(&self, ctx: &mut BuildContext) -> Entity {
         let num_rows = self.memory.len() / self.row_size;
+        let selector = Selector::from(WND_NAME);
+
         let mut grid = Grid::create()
-            .name(WND_NAME)
+            .selector(selector.clone())
             .columns(self.columns())
             .rows(self.rows(num_rows));
-
         for row in 0..num_rows {
             let lbound = row * self.row_size;
             let ubound = lbound + self.row_size;
@@ -52,7 +53,7 @@ impl MemoryView {
             // index column
             grid = grid.child(
                 TextBlock::create()
-                    .name(IDX_NAME)
+                    .selector(selector.clone().class(IDX_CLASS))
                     .text(format!{"{}", lbound})
                     .attach(GridColumn(col))
                     .attach(GridRow(row))
@@ -68,7 +69,7 @@ impl MemoryView {
                 let _ = hex_str.pop(); // remove trailing space
                 grid = grid.child(
                     TextBlock::create()
-                        .name(HEX_NAME)
+                        .selector(selector.clone().class(HEX_CLASS))
                         .text(hex_str)
                         .attach(GridColumn(col))
                         .attach(GridRow(row))
@@ -89,7 +90,7 @@ impl MemoryView {
                 let _ = ascii_str.pop(); // remove trailing space
                 grid = grid.child(
                     TextBlock::create()
-                        .name(HEX_NAME)
+                        .selector(selector.clone().class(HEX_CLASS))
                         .text(ascii_str)
                         .attach(GridColumn(col))
                         .attach(GridRow(row))

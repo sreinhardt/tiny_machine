@@ -1,11 +1,15 @@
+use bit_field::*;
 use orbtk::prelude::*;
 
-const WND_NAME:   &str = "registers";
-const LABEL_NAME: &str = "reg_lbl";
-const HEX_NAME:   &str = "reg_hex";
-const DEC_NAME:   &str = "reg_dec";
-const FLAG_ON:    &str = "reg_flag_on";
-const FLAG_OFF:   &str = "reg_flag_off";
+use crate::registers::{CF_BIT, ZF_BIT, OF_BIT, HF_BIT};
+
+
+const WND_NAME:         &str = "registers";
+const LABEL_CLASS:      &str = "lbl";
+const HEX_CLASS:        &str = "hex";
+const DEC_CLASS:        &str = "dec";
+const FLAG_ON_CLASS:    &str = "flag_on";
+const FLAG_OFF_CLASS:   &str = "flag_off";
 
 const LABEL_WIDTH: f64 = 30.0;
 const VALUE_WIDTH: f64 = 30.0;
@@ -37,33 +41,56 @@ impl Default for RegisterView {
 }
 impl RegisterView {
     pub fn generate(&self, ctx: &mut BuildContext) -> Entity {
-        let disp_lbl = if self.show_hex { HEX_NAME } else { DEC_NAME };
+        let mut row = 0;
+        let mut column = 0;
+        let disp_lbl = if self.show_hex { HEX_CLASS } else { DEC_CLASS };
+        let selector = Selector::from(WND_NAME);
+
         let mut grid = Grid::create()
-            .name(WND_NAME)
+            .selector(selector.clone())
             .columns(self.columns())
             .rows(self.rows());
-        let mut row = 0;
+        // build individual register rows
         for (label, value) in vec![ ("IP", self.ip), ("LI", self.li), ("AC", self.ac), ("FR", self.fr) ] {
             let value = if self.show_hex { format!{"{:2X}", value} }
                         else { format!{"{}", value} };
             grid = grid.child(
                     TextBlock::create()
-                        .name(LABEL_NAME)
+                        .selector(selector.clone().class(LABEL_CLASS))
                         .text(label)
-                        .attach(GridColumn(0))
+                        .attach(GridColumn(column))
                         .attach(ColumnSpan(1))
                         .attach(GridRow(row))
                         .build(ctx)
                 ).child(
                     TextBlock::create()
-                        .name(disp_lbl)
+                        .selector(selector.clone().class(disp_lbl))
                         .text(value)
-                        .attach(GridColumn(2))
+                        .attach(GridColumn(column+2)) // account for span
                         .attach(ColumnSpan(1))
                         .attach(GridRow(row))
                         .build(ctx)
                 );
             row += 1;
+        }
+        // build FR bit flags
+        let flags = vec![
+            ("CF", self.fr.get_bit(CF_BIT)),
+            ("ZF", self.fr.get_bit(ZF_BIT)),
+            ("OF", self.fr.get_bit(OF_BIT)),
+            ("HF", self.fr.get_bit(HF_BIT))
+        ];
+        for (label, value) in flags.iter() {
+            let flag = if *value { FLAG_OFF_CLASS } else { FLAG_ON_CLASS };
+            grid = grid.child(
+                TextBlock::create()
+                    .selector(selector.clone().class(flag))
+                    .text(*label)
+                    .attach(GridColumn(column))
+                    .attach(GridRow(row))
+                    .build(ctx)
+            );
+            column += 1;
         }
         // TODO flags bit boxes
         grid.build(ctx)
@@ -75,7 +102,7 @@ impl RegisterView {
                     .width(ColumnWidth::Auto)
                     .min_width(self.flag_width)
                     .build(),
-                4
+                4 // repeat 4
             ).build()
     }
     fn rows(&self) -> Rows {

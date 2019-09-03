@@ -1,9 +1,9 @@
 use orbtk::prelude::*;
 
-const WND_NAME: &str = "disassembly";
-const IDX_NAME: &str = "disas_idx";
-const HEX_NAME: &str = "disas_hex";
-const OP_NAME:  &str = "disas_op";
+const WND_NAME:  &str = "disassembly";
+const IDX_CLASS: &str = "idx";
+const HEX_CLASS: &str = "hex";
+const OP_CLASS:  &str = "opcode";
 
 const IDX_WIDTH: f64 = 10.0;
 const HEX_WIDTH: f64 = 30.0;
@@ -14,7 +14,7 @@ pub struct DisassemblyView {
     show_hex:       bool,
     idx_width:      f64,
     hex_width:      f64,
-    opcode_width:   f64,
+    opcode_width:   f64
 }
 impl Default for DisassemblyView {
     fn default() -> Self {
@@ -28,7 +28,7 @@ impl Default for DisassemblyView {
                 "a".to_string(),
                 "ui".to_string()
             ],
-            show_hex:       false,
+            show_hex:       true,
             idx_width:      IDX_WIDTH,
             hex_width:      HEX_WIDTH,
             opcode_width:   OP_WIDTH,
@@ -37,8 +37,9 @@ impl Default for DisassemblyView {
 }
 impl DisassemblyView {
     pub fn generate(&self, ctx: &mut BuildContext) -> Entity {
+        let selector = Selector::from(WND_NAME);
         let mut grid = Grid::create()
-            .name(WND_NAME)
+            .selector(selector.clone())
             //.min_size(min_width, min_height)
             .columns(self.columns())
             .rows(self.rows());
@@ -47,7 +48,7 @@ impl DisassemblyView {
             let mut col = 0;
             grid = grid.child( // row count
                 TextBlock::create()
-                    .name(IDX_NAME)
+                    .selector(selector.clone().class(IDX_CLASS))
                     .text(format!{"{}", idx})
                     .attach(GridColumn(col))
                     .attach(GridRow(idx))
@@ -57,7 +58,7 @@ impl DisassemblyView {
             if self.show_hex {
                 grid = grid.child(
                     TextBlock::create()
-                        .name(HEX_NAME)
+                        .selector(selector.clone().class(HEX_CLASS))
                         //.text(format!{"{:2X}", opcode})
                         .text("0x00".to_string())
                         .attach(GridColumn(col))
@@ -68,7 +69,7 @@ impl DisassemblyView {
             }
             grid = grid.child( // actual opcodes
                 TextBlock::create()
-                    .name(OP_NAME)
+                    .selector(selector.clone().class(OP_CLASS))
                     .text(format!{"{}", opcode})
                     .attach(GridColumn(col))
                     .attach(GridRow(idx))
@@ -84,10 +85,11 @@ impl DisassemblyView {
                 .min_width(self.idx_width)
                 .build());
         if self.show_hex {
-            columns = columns.column(Column::create()
-                .width(ColumnWidth::Auto)
-                .min_width(self.hex_width)
-                .build());
+            columns = columns.column(
+                Column::create()
+                    .width(ColumnWidth::Auto)
+                    .min_width(self.hex_width)
+                    .build());
         }
         columns.column(Column::create()
             .width(ColumnWidth::Auto)
