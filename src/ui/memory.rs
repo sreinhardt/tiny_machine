@@ -104,29 +104,25 @@ impl MemoryView {
         let mut columns = Columns::create()
             .column(Column::create()
                 .width(ColumnWidth::Auto)
-                .min_width(self.idx_width)
+//                .min_width(self.idx_width)
                 .build());
         if self.show_hex {
             columns = columns.column(Column::create()
                 .width(ColumnWidth::Auto)
-                .min_width(self.hex_width)
+//                .min_width(self.hex_width)
                 .build());
         }
         if self.show_ascii {
             columns = columns.column(Column::create()
                 .width(ColumnWidth::Auto)
-                .min_width(self.ascii_width)
+//                .min_width(self.ascii_width)
                 .build());
         }
         columns.build()
     }
     fn rows(&self, num: usize) -> Rows {
         Rows::create()
-            .repeat(
-                Row::create()
-                    .max_height(15.0)
-                    .build(),
-                num
-            ).build()
+			.repeat("*", num)
+            .build()
     }
 }

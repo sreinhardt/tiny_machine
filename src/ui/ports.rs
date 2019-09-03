@@ -8,8 +8,8 @@ const HEX_CLASS:   &str = "hex";
 const ASCII_CLASS: &str = "ascii";
 
 const IDX_WIDTH:    f64 = 10.0;
-const HEX_WIDTH:    f64 = 30.0;
-const ASCII_WIDTH:  f64 = 30.0;
+const HEX_WIDTH:    f64 = 50.0;
+const ASCII_WIDTH:  f64 = 50.0;
 
 pub struct PortView {
     data:        Vec<u8>,

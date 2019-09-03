@@ -82,18 +82,18 @@ impl DisassemblyView {
         let mut columns = Columns::create()
             .column(Column::create()
                 .width(ColumnWidth::Auto)
-                .min_width(self.idx_width)
+//                .min_width(self.idx_width)
                 .build());
         if self.show_hex {
             columns = columns.column(
                 Column::create()
                     .width(ColumnWidth::Auto)
-                    .min_width(self.hex_width)
+//                    .min_width(self.hex_width)
                     .build());
         }
         columns.column(Column::create()
             .width(ColumnWidth::Auto)
-            .min_width(self.opcode_width)
+//            .min_width(self.opcode_width)
             .build()
         ).build()
     }
